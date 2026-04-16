@@ -1,0 +1,47 @@
+extends ../layout
+
+block content
+  h2.mb-4 Editar Usuario: #{usuario.nombre}
+  
+  .card.shadow-sm
+    .card-body.p-4
+      form(action=`/admin/usuarios/actualizar/${usuario.id}`, method="POST")
+        .row
+          .col-md-6.mb-3
+            label.form-label Nombre Completo
+            input.form-control(type="text", name="nombre", value=usuario.nombre, required)
+          .col-md-6.mb-3
+            label.form-label Correo Electrónico
+            input.form-control(type="email", name="correo", value=usuario.correo, required)
+        
+        .row
+          .col-md-12.mb-3
+            label.form-label Rol del Usuario
+            select.form-select(name="rol", required)
+              option(value="alumno", selected=usuario.rol === 'alumno') Alumno
+              option(value="maestro", selected=usuario.rol === 'maestro') Maestro
+              option(value="admin", selected=usuario.rol === 'admin') Administrador
+        
+        hr.my-4
+        h5.text-muted Información Académica (Maestros y Alumnos)
+        
+        .row
+          .col-md-6.mb-3
+            label.form-label Grado
+            select.form-select(name="grado")
+              option(value="", selected=usuario.grado === null) N/A
+              option(value="1", selected=usuario.grado == 1) 1° Grado
+              option(value="2", selected=usuario.grado == 2) 2° Grado
+              option(value="3", selected=usuario.grado == 3) 3° Grado
+          
+          .col-md-6.mb-3
+            label.form-label Grupo
+            select.form-select(name="grupo")
+              option(value="", selected=usuario.grupo === null) N/A
+              option(value="A", selected=usuario.grupo === 'A') Grupo A
+              option(value="B", selected=usuario.grupo === 'B') Grupo B
+              option(value="C", selected=usuario.grupo === 'C') Grupo C
+
+        .mt-4
+          button.btn.btn-primary.px-4(type="submit") 🔄 Actualizar Datos
+          a.btn.btn-outline-secondary.ms-2(href="/admin/usuarios") Cancelar

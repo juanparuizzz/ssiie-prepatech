@@ -1,0 +1,86 @@
+extends ../layout
+
+block content
+  .row.justify-content-center
+    .col-md-11
+      // --- HEADER DE MISIÓN ---
+      .row.mb-4.align-items-center
+        .col-md-8
+          h2.display-6.fw-bold(style="letter-spacing: -1.5px;") 
+            i.fa-solid.fa-user-astronaut.me-3.text-primary
+            | Estatus de la Misión Académica
+          p.text-muted Bienvenida(o) de nuevo, explorador. Aquí está tu progreso en tiempo real.
+        .col-md-4.text-md-end
+          //- Botón con estilo de cápsula
+          a.btn.btn-dark.btn-pill.shadow-sm(href="/alumno/boleta" target="_blank")
+            i.fa-solid.fa-file-pdf.me-2.text-danger
+            | Descargar Bitácora Oficial (PDF)
+      hr.opacity-10
+
+      .row.g-4
+        // --- COLUMNA IZQUIERDA: GAFETE DIGITAL ---
+        .col-md-4
+          // Card de Perfil Estilo "Identity Disk"
+          .card.border-0.text-center.shadow-lg.mb-4.p-3(style="background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.4) 100%);")
+            .card-body
+              .position-relative.d-inline-block.mb-3
+                img.rounded-circle.border.border-4.border-white.shadow(src="https://ui-avatars.com/api/?name=" + alumno.nombre + "&background=00d2ff&color=fff&size=128", width="120")
+                span.position-absolute.bottom-0.end-0.badge.rounded-circle.bg-success.p-2.border.border-2.border-white(title="En línea")
+              
+              h4.fw-extrabold.mb-1(style="color: #000;")= alumno.nombre
+              p.text-muted.small.mb-3= alumno.correo
+              
+              .d-flex.justify-content-center.gap-2.mb-4
+                span.badge.bg-primary.rounded-pill.px-3 #{alumno.grado}° GRADO
+                span.badge.bg-dark.rounded-pill.px-3 GRUPO "#{alumno.grupo}"
+
+              // Indicador de Nivel (Promedio)
+              .p-3.rounded-4.mb-3(style="background: rgba(0,0,0,0.05);")
+                small.text-uppercase.fw-bold.text-muted Nivel de Aptitud
+                h1.display-4.fw-bold.mb-0(class=`text-${stats.colorEstado}`)= stats.promedio
+                span.badge.rounded-pill(class=`bg-${stats.colorEstado}`) #{stats.estado}
+
+              // Barra de Progreso de Misiones
+              .mt-4.text-start
+                .d-flex.justify-content-between.mb-1
+                  small.fw-bold Misiones Completadas
+                  small.fw-bold= stats.totalMaterias
+                .progress(style="height: 8px; border-radius: 10px;")
+                  .progress-bar.bg-primary(role="progressbar" style=`width: ${(stats.totalMaterias / 8) * 100}%`)
+
+        // --- COLUMNA DERECHA: LÍNEA DE TIEMPO ACADÉMICA ---
+        .col-md-8
+          .card.border-0.shadow-lg
+            .card-header.bg-transparent.border-0.pt-4.ps-4
+              h5.fw-bold 
+                i.fa-solid.fa-list-check.me-2
+                | Bitácora de Calificaciones
+            .card-body.px-4
+              if calificaciones && calificaciones.length > 0
+                .list-group.list-group-flush
+                  each nota in calificaciones
+                    .list-group-item.px-0.py-3.border-0.mb-2.rounded-4.hover-lift(style="background: rgba(255,255,255,0.3); transition: 0.3s;")
+                      .row.align-items-center.mx-2
+                        .col-auto
+                          // Icono según calificación
+                          .rounded-circle.d-flex.align-items-center.justify-content-center(class=nota.calificacion < 6 ? 'bg-danger-subtle' : 'bg-primary-subtle' style="width: 45px; height: 45px;")
+                            i.fa-solid(class=nota.calificacion < 6 ? 'fa-triangle-exclamation text-danger' : 'fa-check-double text-primary')
+                        
+                        .col
+                          h6.mb-0.fw-bold= nota.nombre_materia
+                          small.text-muted Docente: #{nota.maestro}
+                        
+                        .col-auto.text-end
+                          .h4.mb-0.fw-bold(class=nota.calificacion < 6 ? 'text-danger' : 'text-dark')= nota.calificacion
+                          small.text-uppercase.fw-bold.opacity-50(style="font-size: 0.6rem;") Score
+              else
+                .text-center.py-5
+                  i.fa-solid.fa-satellite.display-1.text-muted.mb-3.opacity-25
+                  h5.text-muted No hay señales de radar todavía
+                  p Los profesores no han reportado misiones completadas aún.
+
+  style.
+    .fw-extrabold { font-weight: 800; }
+    .hover-lift:hover { transform: translateX(10px); background: rgba(255,255,255,0.8) !important; cursor: default; }
+    .bg-primary-subtle { background-color: rgba(0, 210, 255, 0.1) !important; }
+    .bg-danger-subtle { background-color: rgba(255, 0, 118, 0.1) !important; }

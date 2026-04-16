@@ -1,0 +1,252 @@
+/* Importar tipografía moderna */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #f0f2f5; /* Un gris muy claro azulado */
+    color: #2d3436;
+}
+
+/* Navbar Moderna con Degradado */
+.navbar {
+    background: var(--primary-gradient) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+/* Tarjetas Estilo "Apple" */
+.card {
+    background: var(--glass-bg);
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    padding: 1.25rem !important;
+    font-weight: 700;
+    color: #4834d4;
+}
+
+/* Botones con Micro-interacciones */
+.btn {
+    border-radius: 12px !important;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    border: none;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+/* Tablas Limpias */
+.table {
+    --bs-table-hover-bg: rgba(13, 110, 253, 0.03);
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eee;
+}
+
+/* Badges y Chips */
+.badge {
+    border-radius: 8px;
+    padding: 0.5em 1em;
+    font-weight: 500;
+}
+
+/* Animación de entrada para todo el contenido */
+.container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Importar tipografía con más pesos */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+    --accent-gradient: linear-gradient(135deg, #6610f2 0%, #ff0076 100%);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --shadow-pro: 0 20px 40px rgba(0, 0, 0, 0.08);
+    --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: #f8f9fc;
+    /* Efecto de fondo sutil con círculos de gradiente */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(13, 110, 253, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(102, 16, 242, 0.05) 0px, transparent 50%);
+    color: #2d3436;
+    min-height: 100vh;
+}
+
+/* --- ANIMACIONES DE FONDO --- */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.navbar {
+    background: var(--primary-gradient) !important;
+    background-size: 200% 200% !important;
+    animation: gradientBG 10s ease infinite; /* Gradiente que se mueve solo */
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.9rem 0;
+}
+
+/* --- EFECTOS EN TARJETAS (CARDS) --- */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 24px !important;
+    box-shadow: var(--shadow-pro);
+    transition: var(--transition-smooth);
+    position: relative;
+    z-index: 1;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+}
+
+/* Línea de gradiente superior en las tarjetas al hacer hover */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent-gradient);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+    border-radius: 24px 24px 0 0;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+/* --- BOTONES CON EFECTO MAGNÉTICO --- */
+.btn {
+    border-radius: 14px !important;
+    padding: 0.7rem 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: var(--transition-smooth);
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    border: none;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 8px 25px rgba(102, 16, 242, 0.4);
+    filter: brightness(1.1);
+}
+
+/* --- TABLAS Y FILAS --- */
+.table-responsive {
+    border-radius: 20px;
+}
+
+tr {
+    transition: var(--transition-smooth);
+}
+
+tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.04) !important;
+    transform: scale(1.005);
+}
+
+/* --- BADGES ANIMADOS --- */
+.badge {
+    border-radius: 10px;
+    padding: 0.6em 1.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+    0% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+}
+
+/* --- INPUTS MODERNOS --- */
+.form-control {
+    border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #eee;
+    transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+    border-color: #6610f2;
+    box-shadow: 0 0 0 4px rgba(102, 16, 242, 0.1);
+    background-color: #fff;
+}
+
+/* --- ANIMACIÓN DE ENTRADA (STAGGERED) --- */
+.container > * {
+    animation: fadeInUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}

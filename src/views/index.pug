@@ -1,0 +1,92 @@
+extends layout
+
+block content
+  // --- SECCIÓN 1: HERO INNOVATION ---
+  .row.align-items-center.min-vh-75.mb-5
+    .col-lg-6.order-2.order-lg-1
+      .badge.bg-primary.bg-opacity-10.text-primary.px-3.py-2.rounded-pill.mb-3.fw-bold 
+        i.fa-solid.fa-bolt.me-2
+        | TU FUTURO EN NUESTRAS MANOS.
+      h1.display-2.fw-bold.mb-4(style="letter-spacing: -2px; line-height: 1;")
+        | Gestiona tu futuro, 
+        span.text-primary hoy.
+      p.lead.text-secondary.mb-8.pe-lg-5
+        | Prepa Tech SIIE es la infraestructura digital diseñada para potenciar el talento estudiantil y optimizar la gestión docente con tecnología de vanguardia.
+      .d-flex.gap-3.flex-wrap
+        a.btn.btn-primary.btn-lg.px-5.py-3.shadow-lg(href="/login") 
+          | Empezar ahora
+          i.fa-solid.fa-arrow-right.ms-2
+        a.btn.btn-outline-dark.btn-lg.px-5.py-3(href="#mision") 
+          | Nuestra Visión
+
+    .col-lg-6.order-1.order-lg-2.text-center.mb-5.mb-lg-0
+      .position-relative
+        //- Decoración detrás de la imagen
+        .position-absolute.top-50.left-60.translate-middle.bg-primary.opacity-6.rounded-circle(style="width: 100px; height: 400px; filter: blur(80px);")
+        img.img-fluid.position-relative.z-index-1.rounded-5(src="https://img.freepik.com/free-vector/digital-lifestyle-concept-illustration_114360-7250.jpg", alt="Dashboard Tech", style="max-height: 450px;")
+
+  // --- SECCIÓN 2: CORE FEATURES (Tarjetas con Hover Efecto) ---
+  #features.row.g-4.mb-5.py-5
+    .col-md-12.text-center.mb-4
+      h6.text-primary.text-uppercase.fw-bold.ls-2 Módulos Inteligentes
+      h2.display-5.fw-bold El motor de la Preparatoria
+
+    .col-md-4
+      .card.border-0.h-100.hover-lift
+        .card-body.p-5
+          .icon-shape.bg-primary.bg-opacity-10.text-primary.rounded-3.mb-4
+            i.fa-solid.fa-layer-group.fa-2x
+          h4.fw-bold Reportes Pro
+          p.text-muted Generación instantánea de boletas oficiales en PDF con sellos digitales de validación.
+    
+    .col-md-4
+      .card.border-0.h-100.hover-lift
+        .card-body.p-5
+          .icon-shape.bg-info.bg-opacity-10.text-info.rounded-3.mb-4
+            i.fa-solid.fa-chart-line.fa-2x
+          h4.fw-bold Analíticas
+          p.text-muted Algoritmos que calculan promedios y desempeño académico en tiempo real para cada estudiante.
+    
+    .col-md-4
+      .card.border-0.h-100.hover-lift
+        .card-body.p-5
+          .icon-shape.bg-dark.bg-opacity-10.text-dark.rounded-3.mb-4
+            i.fa-solid.fa-shield-virus.fa-2x
+          h4.fw-bold Seguridad
+          p.text-muted Encriptación de datos bajo estándares internacionales para proteger la privacidad escolar.
+
+  // --- SECCIÓN 3: MISION & VALORES ---
+  #mision.row.align-items-center.py-5.my-5.bg-dark.rounded-5.text-white.overflow-hidden.position-relative
+    .col-md-7.p-5.z-index-1
+      h2.display-4.fw-bold.mb-4 Compromiso con la Excelencia
+      p.lead.opacity-75.mb-4 
+        | No somos solo un sistema de calificaciones; somos el puente entre el aprendizaje y la tecnología. Nuestra misión es eliminar la burocracia escolar para dejar espacio a la innovación.
+      .row.g-3
+        .col-6
+          .h3.fw-bold.text-primary +98%
+          p.small Satisfacción de Alumnos
+        .col-6
+          .h3.fw-bold.text-primary 24/7
+          p.small Disponibilidad Total
+    .col-md-5.p-0.d-none.d-md-block
+      img.img-fluid.h-100(src="https://img.freepik.com/free-photo/young-student-woman-wearing-headphones-using-laptop-university-campus_231208-11440.jpg", style="object-fit: cover; min-height: 400px; opacity: 0.6;")
+
+  // --- FOOTER MINIMALISTA ---
+  footer.py-5.mt-5
+    .row.justify-content-between.align-items-center
+      .col-md-4.text-center.text-md-start
+        p.text-muted.small.mt-2 🎓 PREPA TECH - Del Norte
+        p.text-muted.small.mt-2 Gestión Escolar Inteligente 
+      .col-md-4.text-center
+        .social-links.d-flex.justify-content-center.gap-3
+      .col-md-4.text-center.text-md-end
+        span.text-muted.small © 2026 Todos los derechos reservados Prepa Tech - Del Norte.
+
+  // --- ESTILOS EXTRA PARA ESTA VISTA ---
+  style.
+    .ls-2 { letter-spacing: 2px; }
+    .hover-lift:hover { transform: translateY(-12px) !important; transition: all 0.3s ease; }
+    .icon-shape { width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; }
+    .min-vh-75 { min-height: 75vh; }
+    .fw-extrabold { font-weight: 800; }
+    .z-index-1 { z-index: 1; }

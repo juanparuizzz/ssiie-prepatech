@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  .row.justify-content-center.mt-4
+    .col-md-6
+      .card.shadow-sm.border-0
+        .card-header.bg-dark.text-white.py-3
+          h5.mb-0 ⚙️ Configuración de mi Perfil
+        .card-body.p-4
+          form(action="/mi-cuenta/actualizar" method="POST")
+            .mb-3
+              label.form-label Nombre Completo
+              input.form-control(type="text" name="nombre" value=user.nombre required)
+            .mb-3
+              label.form-label Correo Electrónico
+              input.form-control(type="email" name="correo" value=user.correo required)
+            .d-grid.gap-2.mt-4
+              button.btn.btn-primary.py-2(type="submit") Actualizar mis datos
+              a.btn.btn-light(href="javascript:history.back()") Cancelar

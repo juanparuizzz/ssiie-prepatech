@@ -1,0 +1,143 @@
+extends ../layout
+
+block content
+  // --- CABECERA ---
+  .row.mb-4.align-items-center
+    .col-md-7
+      h2.display-6.fw-bold(style="color: #000;") 👨‍🏫 Panel del Docente
+      p.text-muted 
+        | Gestión Académica: 
+        strong #{maestro.grado}° "#{maestro.grupo}" 
+        span.ms-2 | Ciclo Escolar 2026
+    
+    .col-md-5.text-md-end.d-print-none
+      .btn-group.shadow-sm
+        button.btn.btn-outline-dark(onclick="exportarExcelCompleto()" title="Descargar Excel")
+          i.fa-solid.fa-file-excel.me-2.text-success
+          | Exportar Excel
+        button.btn.btn-dark(onclick="window.print()")
+          i.fa-solid.fa-file-pdf.me-2.text-danger
+          | Vista PDF / Imprimir
+  hr
+
+  .row
+    // --- FORMULARIO DE CAPTURA (Solo se ve en pantalla) ---
+    .col-md-4.d-print-none
+      .card.shadow-sm.border-0.rounded-4
+        .card-header.bg-primary.text-white.rounded-top-4
+          h5.mb-0 Registrar Nota
+        .card-body.p-4
+          form#formCalificar(action="/maestro/calificar" method="POST")
+            .mb-3
+              label.form-label.fw-bold Alumno
+              select.form-select.rounded-3(name="alumno_id" id="alumno_select" required)
+                option(value="") Selecciona...
+                each alumno in alumnos
+                  option(value=alumno.id) #{alumno.nombre}
+            
+            .mb-3
+              label.form-label.fw-bold Materia
+              select.form-select.rounded-3(name="materia_id" id="materia_select" required)
+                option(value="") Selecciona...
+                each materia in materias
+                  option(value=materia.id) #{materia.nombre_materia}
+            
+            .mb-3
+              label.form-label.fw-bold Calificación
+              input.form-control.rounded-3(type="number" name="nota" id="nota_input" step="0.1" min="0" max="10" placeholder="0.0 - 10.0" required)
+            
+            button.btn.btn-success.w-100.py-2.rounded-pill(type="submit") 💾 Guardar en Sistema
+
+    // --- REPORTE ORDENADO (Se imprime en PDF) ---
+    .col-md-8
+      .card.shadow-sm.border-0.rounded-4
+        .card-header.bg-dark.text-white.rounded-top-4.d-flex.justify-content-between.align-items-center
+          h5.mb-0 Reporte de Calificaciones
+          span.badge.bg-secondary.rounded-pill Total registros: #{historial.length}
+        .card-body
+          if historial && historial.length > 0
+            //- Agrupamos el historial por alumno en el PDF
+            .table-responsive
+              table#tablaHistorial.table.table-hover.align-middle
+                thead.table-light
+                  tr
+                    th(style="color:#000; width: 40%") Alumno
+                    th(style="color:#000; width: 30%") Materia
+                    th.text-center(style="color:#000; width: 15%") Nota
+                    th.text-center.d-print-none(style="color:#000; width: 15%") Acción
+                tbody
+                  //- Lógica para agrupar visualmente por alumno
+                  - let ultimoAlumno = ''
+                  each item in historial
+                    tr(class=(ultimoAlumno !== item.alumno && ultimoAlumno !== '' ? 'border-top-dark' : ''))
+                      td
+                        if ultimoAlumno !== item.alumno
+                          .fw-bold.text-primary.text-uppercase(style="font-size: 0.9rem;")= item.alumno
+                          - ultimoAlumno = item.alumno
+                        else
+                          span.text-muted.ms-3 ↳
+                      td= item.nombre_materia
+                      td.text-center
+                        span.badge.rounded-pill(class=item.calificacion >= 6 ? 'bg-info text-dark' : 'bg-danger')= item.calificacion
+                      td.text-center.d-print-none
+                        button.btn.btn-sm.btn-warning.rounded-circle(type="button" onclick=`editarNota('${item.alumno_id}', '${item.materia_id}', '${item.calificacion}')` title="Editar")
+                          i.fa-solid.fa-pen
+          else
+            .text-center.py-5
+              i.fa-solid.fa-box-open.display-4.text-muted.mb-3
+              p.text-muted Aún no has registrado calificaciones para este grupo.
+
+  // --- SCRIPTS ---
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
+  script.
+    const historialJS = !{JSON.stringify(historial)};
+    const alumnoSelect = document.getElementById('alumno_select');
+    const materiaSelect = document.getElementById('materia_select');
+
+    function exportarExcelCompleto() {
+      if (!historialJS.length) return alert("Sin datos.");
+      const historialOrdenado = [...historialJS].sort((a, b) => a.alumno.localeCompare(b.alumno));
+      const filasExcel = historialOrdenado.map(item => ({
+        "Alumno": item.alumno,
+        "Materia": item.nombre_materia,
+        "Calificación": item.calificacion,
+        "Grado/Grupo": "#{maestro.grado}° #{maestro.grupo}"
+      }));
+      const hoja = XLSX.utils.json_to_sheet(filasExcel);
+      const libro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(libro, hoja, "Calificaciones");
+      XLSX.writeFile(libro, `Reporte_SIIE_#{maestro.grado}#{maestro.grupo}.xlsx`);
+    }
+
+    function editarNota(alumnoId, materiaId, nota) {
+      alumnoSelect.value = alumnoId;
+      Array.from(materiaSelect.options).forEach(opt => opt.style.display = 'block');
+      materiaSelect.value = materiaId;
+      document.getElementById('nota_input').value = nota;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    alumnoSelect.addEventListener('change', function() {
+      const alumnoId = this.value;
+      Array.from(materiaSelect.options).forEach(opt => opt.style.display = 'block');
+      if (alumnoId) {
+        const calificadas = historialJS.filter(h => h.alumno_id == alumnoId).map(h => h.materia_id.toString());
+        Array.from(materiaSelect.options).forEach(opt => {
+          if (calificadas.includes(opt.value)) opt.style.display = 'none';
+        });
+      }
+      materiaSelect.value = "";
+    });
+
+  style.
+    .border-top-dark { border-top: 2px solid #333 !important; }
+    .fw-500 { font-weight: 500; }
+    @media print {
+      @page { size: letter; margin: 1cm; }
+      .d-print-none, hr { display: none !important; }
+      body { background: white !important; font-size: 10pt; }
+      .card { border: 1px solid #000 !important; shadow: none !important; }
+      .card-header { background: #eee !important; color: #000 !important; border-bottom: 1px solid #000 !important; }
+      .text-primary { color: #000 !important; }
+      .badge { border: 1px solid #000 !important; color: #000 !important; background: transparent !important; }
+    }

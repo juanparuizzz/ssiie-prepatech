@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+  h2.mb-4 Registrar Nuevo Usuario
+  .card.shadow-sm
+    .card-body.p-4
+      form(action="/admin/usuarios/guardar", method="POST")
+        .row
+          .col-md-6.mb-3
+            label.form-label Nombre Completo
+            input.form-control(type="text", name="nombre", placeholder="Ej: Juan Pérez", required)
+          .col-md-6.mb-3
+            label.form-label Correo Electrónico
+            input.form-control(type="email", name="correo", placeholder="correo@ejemplo.com", required)
+        
+        .row
+          .col-md-6.mb-3
+            label.form-label Contraseña
+            input.form-control(type="password", name="password", required)
+          .col-md-6.mb-3
+            label.form-label Rol del Usuario
+            select.form-select(name="rol", required)
+              option(value="alumno") Alumno
+              option(value="maestro") Maestro
+              option(value="admin") Administrador
+        
+        hr.my-4
+        h5.text-muted Información Académica (Maestros y Alumnos)
+        
+        .row
+          .col-md-6.mb-3
+            label.form-label Grado
+            select.form-select(name="grado")
+              option(value="") N/A (Admin)
+              option(value="1") 1° Grado
+              option(value="2") 2° Grado
+              option(value="3") 3° Grado
+          
+          .col-md-6.mb-3
+            label.form-label Grupo
+            select.form-select(name="grupo")
+              option(value="") N/A (Admin)
+              option(value="A") Grupo A
+              option(value="B") Grupo B
+              option(value="C") Grupo C
+
+        .mt-4
+          button.btn.btn-success.px-4(type="submit") 💾 Guardar Usuario
+          a.btn.btn-outline-secondary.ms-2(href="/admin/usuarios") Cancelar

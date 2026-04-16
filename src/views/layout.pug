@@ -1,0 +1,169 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    meta(name="theme-color" content="#3a7bd5")
+    meta(name="description" content="SIIE Prepa Tech - Sistema Integral de Información Escolar")
+    title= title || 'SIIE - Prepa Tech'
+    
+    //- Favicon (Sugerencia: agrega uno en /public/favicon.ico)
+    link(rel="icon" type="image/png" href="/img/logo.png")
+    
+    //- Optimizando Google Fonts: Outfit
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet")
+    
+    //- CSS: Font Awesome, Bootstrap, SweetAlert
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css")
+    
+    style.
+      :root {
+        --primary-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        --accent-gradient: linear-gradient(135deg, #6610f2 0%, #ff0076 100%);
+        --glass: rgba(255, 255, 255, 0.45);
+        --shadow-blur: 0 15px 35px rgba(0, 0, 0, 0.1);
+        --text-dark: #1a1a1a;
+      }
+
+      body { 
+        font-family: 'Outfit', sans-serif;
+        background-color: #f0f4f8; 
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Loader de inicio (Profesionalismo) */
+      #loader {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #f0f4f8; z-index: 9999; display: flex;
+        align-items: center; justify-content: center; transition: opacity 0.5s;
+      }
+
+      #tsparticles {
+        position: fixed; width: 100%; height: 100%; top: 0; left: 0;
+        z-index: -1; background-color: #f0f4f8;
+      }
+
+      .navbar { 
+        background: rgba(26, 26, 26, 0.8) !important; /* Navbar más oscura para contraste con texto negro */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.8rem 0;
+      }
+
+      .navbar-brand { font-size: 1.5rem; gap: 10px; color: #fff !important; }
+      .navbar-brand i { color: #00d2ff; }
+
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        border-radius: 20px !important;
+        background: var(--glass);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-blur);
+        transition: 0.3s;
+      }
+      .card:hover { transform: translateY(-5px); }
+
+      .btn-pill { border-radius: 50px !important; padding: 0.6rem 1.5rem; }
+
+      footer {
+        background: rgba(255,255,255,0.3);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(0,0,0,0.05);
+        padding: 2rem 0; margin-top: 5rem;
+      }
+
+      .main-content { animation: fadeIn 0.6s ease-in; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  body
+    #loader: i.fa-solid.fa-circle-notch.fa-spin.fa-3x.text-primary
+    
+    #tsparticles
+
+    nav.navbar.navbar-expand-lg.navbar-dark.sticky-top
+      .container
+        a.navbar-brand.fw-bold(href="/") 
+          i.fa-solid.fa-user-astronaut
+          | PREPA TECH
+        
+        button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav")
+          span.navbar-toggler-icon
+        
+        #navbarNav.collapse.navbar-collapse
+          ul.navbar-nav.me-auto
+            if user
+              if user.rol === 'admin'
+                li.nav-item: a.nav-link(href="/admin/usuarios") #[i.fa-solid.fa-satellite-dish] Panel Admin
+              if user.rol === 'maestro'
+                li.nav-item: a.nav-link(href="/maestro/dashboard") #[i.fa-solid.fa-terminal] Consola Docente
+              if user.rol === 'alumno'
+                li.nav-item: a.nav-link(href="/alumno/perfil") #[i.fa-solid.fa-rocket] Mi Perfil
+          
+          .d-flex.align-items-center.gap-3
+            if user
+              .dropdown
+                button.btn.btn-outline-light.btn-pill.btn-sm.dropdown-toggle(data-bs-toggle="dropdown")
+                  i.fa-solid.fa-circle-user.me-2
+                  | #{user.nombre.split(' ')[0]}
+                ul.dropdown-menu.dropdown-menu-end.border-0.shadow-lg.mt-3.rounded-4
+                  li: a.dropdown-item(href="/mi-cuenta") #[i.fa-solid.fa-sliders.me-2] Ajustes
+                  li: hr.dropdown-divider
+                  li: a.dropdown-item.text-danger(href="/logout") #[i.fa-solid.fa-power-off.me-2] Salir
+            else
+              a.btn.btn-light.btn-pill.btn-sm.fw-bold(href="/login") #[i.fa-solid.fa-key.me-2] Acceso
+
+    main.container.main-content.pt-4
+      block content
+
+    footer.d-print-none
+      .container.text-center
+        p.mb-0.small.fw-bold © 2026 Prepa Tech SIIE. 
+        small.text-muted Ingeniería en Desarrollo y Gestión de Software
+
+    //- Scripts (Cargados al final para velocidad)
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+    script(src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js")
+
+    script.
+      // Ocultar loader al cargar
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+      });
+
+      // Partículas Optimizadas
+      tsParticles.load("tsparticles", {
+        fpsLimit: 60,
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#3a7bd5" },
+          links: { enable: true, distance: 150, color: "#3a7bd5", opacity: 0.2, width: 1 },
+          move: { enable: true, speed: 1.5, direction: "none", outModes: "out" },
+          size: { value: 3 },
+          opacity: { value: 0.3 }
+        },
+        interactivity: {
+          events: { onHover: { enable: true, mode: "grab" }, onClick: { enable: true, mode: "push" } }
+        },
+        retina_detect: true
+      });
+
+      // Alertas Globales
+      const urlParams = new URLSearchParams(window.location.search);
+      const toastConfig = {
+        toast: true, position: 'top-end', showConfirmButton: false, 
+        timer: 3000, timerProgressBar: true, background: '#fff'
+      };
+      
+      if (urlParams.get('update')) Swal.fire({...toastConfig, icon: 'success', title: 'Datos actualizados'});
+      if (urlParams.get('error')) Swal.fire({ icon: 'error', title: 'Error', text: 'Acción no permitida' });

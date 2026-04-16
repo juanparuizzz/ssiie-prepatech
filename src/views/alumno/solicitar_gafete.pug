@@ -1,0 +1,99 @@
+extends ../layout
+
+block content
+  .container.py-5
+    .row.justify-content-center
+      .col-lg-10
+        //- Título y Encabezado
+        .text-center.mb-5
+          h1.fw-bold(style="color: #000; letter-spacing: -2px;") 
+            i.fa-solid.fa-id-card.text-primary.me-3
+            | Identidad Digital Prepa Tech
+          p.text-dark.fw-500 Personaliza y solicita tu gafete oficial para el ciclo escolar 2026.
+
+        .row.g-4
+          // --- COLUMNA 1: FORMULARIO DE SOLICITUD ---
+          .col-md-6
+            .card.border-0.shadow-sm.rounded-4.p-4.h-100
+              h5.fw-bold.mb-4(style="color: #000;") Datos del Gafete
+              form#gafeteForm(action="/alumno/solicitar-gafete" method="POST")
+                .mb-3
+                  label.form-label.small.fw-bold.text-uppercase Tipo de Sangre
+                  select.form-select.rounded-3(name="tipoSangre" required onchange="updatePreview()")
+                    option(value="O+") O Positivo
+                    option(value="O-") O Negativo
+                    option(value="A+") A Positivo
+                    option(value="A-") A Negativo
+                    option(value="B+") B Positivo
+                
+                .mb-3
+                  label.form-label.small.fw-bold.text-uppercase Contacto de Emergencia
+                  input#emergenciaInput.form-control.rounded-3(type="tel" name="contacto" placeholder="449-000-0000" required onkeyup="updatePreview()")
+                
+                .mb-4
+                  label.form-label.small.fw-bold.text-uppercase Foto de Identificación
+                  input#fotoInput.form-control.rounded-3(type="file" accept="image/*" onchange="previewImage(event)")
+                  small.text-muted Formato JPG o PNG, máximo 2MB.
+
+                button.btn.btn-primary.w-100.py-3.rounded-pill.shadow-sm(type="submit")
+                  i.fa-solid.fa-paper-plane.me-2
+                  | Enviar Solicitud Oficial
+
+          // --- COLUMNA 2: PREVISUALIZACIÓN EN VIVO ---
+          .col-md-6
+            .card.border-0.shadow-lg.rounded-4.p-4.bg-dark.bg-opacity-10.h-100.d-flex.align-items-center.justify-content-center
+              h5.fw-bold.mb-4(style="color: #000;") Vista Previa Digital
+              
+              //- El Gafete Estilo "Tech"
+              #id-card.gafete-digital.shadow-lg.position-relative.overflow-hidden(style="width: 300px; height: 480px; background: #fff; border-radius: 20px; border: 1px solid #eee;")
+                //- Header del Gafete
+                .gafete-header.p-3.text-center.text-white(style="background: var(--primary-gradient);")
+                  i.fa-solid.fa-user-astronaut.mb-2.d-block
+                  small.fw-bold.text-uppercase PREPA TECH SIIE
+                
+                //- Foto
+                .text-center.mt-4
+                  img#previewImg.rounded-circle.border.border-4.border-white.shadow(src="https://ui-avatars.com/api/?name=" + user.nombre + "&size=150" style="width: 130px; height: 130px; object-fit: cover;")
+                
+                //- Información del Alumno
+                .p-4.text-center
+                  h5#previewName.fw-bold.mb-1(style="color: #000;")= user.nombre
+                  p.text-primary.small.fw-bold.mb-3= user.rol.toUpperCase()
+                  
+                  .row.text-start.mt-3.g-2
+                    .col-6
+                      small.text-muted.d-block Matrícula
+                      span.fw-bold.small(style="color: #000;")= user.matricula || '2026-XXXX'
+                    .col-6
+                      small.text-muted.d-block Sangre
+                      span#previewBlood.fw-bold.small(style="color: #000;") O+
+                    .col-12
+                      small.text-muted.d-block Emergencia
+                      span#previewEmergency.fw-bold.small(style="color: #000;") --- --- ----
+
+                //- QR de Seguridad (Imagen de ejemplo)
+                .text-center.pb-3
+                  img(src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=PREPATECH-" + user.id style="width: 60px;")
+                  small.d-block.text-muted.mt-2 ID Verificado por Prepa Tech
+
+  style.
+    .gafete-digital { transition: all 0.5s ease; }
+    .gafete-header { border-bottom-left-radius: 50% 20%; border-bottom-right-radius: 50% 20%; }
+    .form-label { letter-spacing: 0.5px; }
+    .form-control:focus, .form-select:focus { border-color: #00d2ff; box-shadow: 0 0 0 4px rgba(0, 210, 255, 0.1); }
+
+  script.
+    function updatePreview() {
+      document.getElementById('previewBlood').innerText = document.querySelector('select[name="tipoSangre"]').value;
+      const emergencia = document.getElementById('emergenciaInput').value;
+      document.getElementById('previewEmergency').innerText = emergencia || '--- --- ----';
+    }
+
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const output = document.getElementById('previewImg');
+        output.src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }

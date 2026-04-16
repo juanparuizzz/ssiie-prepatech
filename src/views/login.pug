@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  // Agregamos una clase de alineación para que la tarjeta flote en el centro
+  .row.justify-content-center.align-items-center(style="min-height: 80vh;")
+    .col-md-5.col-lg-4
+      // .card ahora heredará los estilos de sombra pro y bordes redondeados
+      .card.p-3
+        .card-body
+          .text-center.mb-4
+            // Un icono que use el color del gradiente
+            .display-5.mb-2(style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));") 🛡️
+            h3.fw-bold.text-dark Iniciar Sesión
+            p.text-muted.small Ingresa a la plataforma de la Preparatoria
+
+          form(action="/login", method="POST")
+            .mb-3
+              label.form-label.fw-500 Correo Electrónico
+              input.form-control(
+                type="email", 
+                name="correo", 
+                placeholder="ejemplo@correo.com",
+                required
+              )
+            .mb-4
+              label.form-label.fw-500 Contraseña
+              input.form-control(
+                type="password", 
+                name="password", 
+                placeholder="••••••••",
+                required
+              )
+            
+            // El botón ahora tiene la clase btn-primary que definimos con gradiente animado
+            button.btn.btn-primary.w-100.py-2.shadow-sm(type="submit") 
+              span Entrar al Sistema
+          
+          .text-center.mt-4

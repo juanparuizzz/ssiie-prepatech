@@ -1,0 +1,109 @@
+extends ../layout
+
+block content
+  // --- SECCIÓN DE ESTADÍSTICAS (Resumen Rápido) ---
+  .row.mb-4
+    .col-md-4
+      .card.bg-primary.text-white.shadow-sm.border-0.rounded-4
+        .card-body.text-center
+          h6.text-uppercase.small.opacity-75 Total Alumnos
+          h2.display-6.fw-bold= stats.totalAlumnos || 0
+    .col-md-4
+      .card.bg-warning.text-dark.shadow-sm.border-0.rounded-4
+        .card-body.text-center
+          h6.text-uppercase.small.opacity-75 Total Maestros
+          h2.display-6.fw-bold= stats.totalMaestros || 0
+    .col-md-4
+      .card.bg-danger.text-white.shadow-sm.border-0.rounded-4
+        .card-body.text-center
+          h6.text-uppercase.small.opacity-75 Administradores
+          h2.display-6.fw-bold= stats.totalAdmins || 0
+
+  // --- CABECERA Y BOTÓN DE REGISTRO ---
+  .row.mb-4.align-items-center
+    .col-md-6
+      h2.fw-bold(style="color: #000; letter-spacing: -1px;") Gestión de Usuarios
+      p.text-muted Control central de la matrícula estudiantil y docente.
+    .col-md-6.text-md-end
+      a.btn.btn-dark.px-4.py-2.rounded-pill.shadow-sm(href="/admin/usuarios/crear")
+        i.fa-solid.fa-user-plus.me-2
+        | Registrar Nuevo Usuario
+
+  // --- BARRA DE FILTROS Y BÚSQUEDA ---
+  .row.g-3.mb-4
+    .col-md-7
+      .d-flex.gap-2.flex-wrap
+        input#btnAll.btn-check(type="radio" name="filterRole" checked)
+        label.btn.btn-outline-dark.rounded-pill.px-4(for="btnAll" onclick="filterBy('todos')") Todos
+        
+        input#btnAlumnos.btn-check(type="radio" name="filterRole")
+        label.btn.btn-outline-dark.rounded-pill.px-4(for="btnAlumnos" onclick="filterBy('alumno')") Alumnos
+        
+        input#btnMaestros.btn-check(type="radio" name="filterRole")
+        label.btn.btn-outline-dark.rounded-pill.px-4(for="btnMaestros" onclick="filterBy('maestro')") Maestros
+
+    .col-md-5
+      .input-group.shadow-sm.rounded-pill.overflow-hidden
+        span.input-group-text.bg-white.border-0.ps-3
+          i.fa-solid.fa-magnifying-glass.text-primary
+        input#searchInput.form-control.border-0.py-2(type="text" placeholder="Buscar nombre o correo..." onkeyup="searchUser()")
+
+  // --- TABLA DE USUARIOS ---
+  .card.border-0.shadow-sm.rounded-4.overflow-hidden
+    .table-responsive
+      table.table.table-hover.align-middle.mb-0
+        thead.bg-light
+          tr
+            th.ps-4(style="color: #000; font-weight: 700;") Usuario
+            th(style="color: #000; font-weight: 700;") Correo
+            th(style="color: #000; font-weight: 700;") Rol
+            th(style="color: #000; font-weight: 700;") Grado
+            th.text-end.pe-4(style="color: #000; font-weight: 700;") Acciones
+        tbody#userTableBody
+          if usuarios && usuarios.length > 0
+            each user in usuarios
+              tr.user-row(data-role=user.rol)
+                td.ps-4
+                  .d-flex.align-items-center
+                    .avatar.me-3.bg-dark.bg-opacity-10.text-dark.rounded-circle.d-flex.justify-content-center.align-items-center(style="width: 40px; height: 40px; font-weight: bold;")
+                      | #{user.nombre.charAt(0)}
+                    div
+                      .fw-bold(style="color: #000;")= user.nombre
+                      small.text-muted ID: #{user.id}
+                td= user.correo
+                td
+                  span.badge.rounded-pill(class=user.rol === 'admin' ? 'bg-danger' : user.rol === 'maestro' ? 'bg-warning text-dark' : 'bg-info text-dark')= user.rol
+                td= user.grado ? user.grado + '°' : '-'
+                td.text-end.pe-4
+                  .btn-group.gap-2
+                    a.btn.btn-sm.btn-light.rounded-pill.px-3(href=`/admin/usuarios/editar/${user.id}`)
+                      i.fa-solid.fa-pen.me-1
+                      | Editar
+                    a.btn.btn-sm.btn-outline-danger.rounded-pill.px-3(href=`/admin/usuarios/eliminar/${user.id}`, onclick="return confirm('¿Seguro que deseas eliminar este usuario?')")
+                      i.fa-solid.fa-trash
+
+  // --- LÓGICA DE FILTRADO Y BÚSQUEDA ---
+  script.
+    function filterBy(role) {
+      const rows = document.querySelectorAll('.user-row');
+      rows.forEach(row => {
+        if (role === 'todos' || row.getAttribute('data-role') === role) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function searchUser() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('.user-row');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+      });
+    }
+
+  style.
+    .btn-check:checked + .btn-outline-dark { background-color: #000 !important; color: #fff !important; border-color: #000 !important; }
+    .table-hover tbody tr:hover { background-color: rgba(0, 0, 0, 0.02); }

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .row.justify-content-center.align-items-center(style="min-height: 70vh;")
+    .col-md-6.text-center
+      //- Animación de icono perdido
+      .mb-4
+        i.fa-solid.fa-user-astronaut.fa-bounce.display-1(style="color: #3a7bd5; --fa-animation-duration: 3s;")
+      
+      h1.display-1.fw-bold.text-dark 404
+      h3.fw-bold.mb-3 ¡Ups! Te saliste de la órbita.
+      p.text-muted.mb-5 
+        | La página que buscas ha sido absorbida por un agujero negro o nunca existió en esta galaxia. 
+        br
+        | No te preocupes, el radar te guiará de vuelta.
+
+      .d-grid.gap-3.d-sm-flex.justify-content-sm-center
+        a.btn.btn-primary.btn-pill.px-5.py-3.shadow(href="/") 
+          i.fa-solid.fa-house-signal.me-2
+          | Regresar a la Base Central
+        
+        button.btn.btn-outline-dark.btn-pill.px-5.py-3(onclick="history.back()")
+          i.fa-solid.fa-arrow-rotate-left.me-2
+          | Volver al Punto Anterior
